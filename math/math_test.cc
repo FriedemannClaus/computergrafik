@@ -15,7 +15,7 @@ TEST(VECTOR, ListInitialization3df) {
   
   EXPECT_NEAR(1.0, vector[0], 0.00001);
   EXPECT_NEAR(0.0, vector[1], 0.00001);
-  EXPECT_NEAR(5.0, vector[2], 0.00001);
+  EXPECT_NEAR(5.0, vector[2], 0.00001); //Changed from 5.0 to 4.0. Works, now the test fails.
 }
 
 

@@ -1,0 +1,16 @@
+# ninja log v5
+0	175	7182116465187943	CMakeFiles/math_test.dir/math.cc.obj	c13f7acf50d4821e
+6	767	7182116471110400	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	936c0629a74f58fb
+3	1048	7182116473909035	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
+8	4660	7182116509910598	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	7c4567340538f368
+4661	7010	7182116533533532	lib/libgtest.a	e57eeb976319e0b0
+7010	7046	7182116533890478	lib/libgtest_main.a	a91ee36f76f59a12
+7046	9530	7182116558689511	math_test.exe	cf5cc1e9e8cbaa16
+2	1038	7182117569444154	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
+1038	3342	7182117592448045	math_test.exe	cf5cc1e9e8cbaa16
+3	1076	7182117748563140	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
+1076	3468	7182117772448659	math_test.exe	cf5cc1e9e8cbaa16
+3	1059	7182118135540839	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
+1059	3488	7182118159788134	math_test.exe	cf5cc1e9e8cbaa16
+2	1134	7182118597150815	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
+1134	3575	7182118621513646	math_test.exe	cf5cc1e9e8cbaa16
