@@ -1,0 +1,21 @@
+# ninja log v5
+1287	1317	7201148426266059	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	b623621642c6ad4f
+1	30	7201148413399427	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	d56357386d81855f
+1197	1230	7201148425396104	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	fcca49036ed73287
+1	30	7201148413399427	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	d56357386d81855f
+1230	1259	7201148425686356	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	5ef3fb575ccdf8fc
+31	1197	7201148425065162	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	a15f50a752656027
+31	1197	7201148425065162	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	a15f50a752656027
+1230	1259	7201148425686356	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	5ef3fb575ccdf8fc
+1197	1230	7201148425396104	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	fcca49036ed73287
+1259	1287	7201148425967190	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	b6d88d99b64c5e07
+1378	1416	7201148427256021	CMakeFiles/googletest-populate-complete	b11cb261b047e080
+1259	1287	7201148425967190	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	b6d88d99b64c5e07
+1287	1317	7201148426266059	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	b623621642c6ad4f
+1317	1349	7201148426585264	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	f5864c374ef4d9f2
+1317	1349	7201148426585264	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	f5864c374ef4d9f2
+1349	1378	7201148426876087	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	63611ea70433ac7
+1349	1378	7201148426876087	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	63611ea70433ac7
+1378	1416	7201148427256021	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	b11cb261b047e080
+1378	1416	7201148427256021	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	b11cb261b047e080
+1378	1416	7201148427256021	C:/Users/Friedemann/Documents/GitHub/computergrafik/geometry/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	b11cb261b047e080

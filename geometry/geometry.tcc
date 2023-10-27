@@ -77,7 +77,7 @@ Sphere<FLOAT,N>::Sphere(Vector<FLOAT,N> center, FLOAT radius)
 // solution via
 // (g(t) - center )^2  = ( (ray.origin - center) + t ray.direction)^2 = r^2 
 // and abc-formula
-/*
+
 template <class FLOAT, size_t N>
 FLOAT Sphere<FLOAT,N>::intersects(const Ray<FLOAT, N> &ray) const {
   Vector<FLOAT,N> om = ray.origin - center;
@@ -110,7 +110,7 @@ bool Sphere<FLOAT,N>::intersects(const Ray<FLOAT, N> &ray, Intersection_Context<
   }
   return true;
 }
-*/
+
 template <class FLOAT, size_t N>
 Triangle<FLOAT, N>::Triangle(Vector<FLOAT, N> a, Vector<FLOAT, N> b, Vector<FLOAT, N> c, Vector<FLOAT, N> na, Vector<FLOAT, N> nb, Vector<FLOAT, N> nc)
  : a(a), b(b), c(c), na(na), nb(nb), nc(nc) { }

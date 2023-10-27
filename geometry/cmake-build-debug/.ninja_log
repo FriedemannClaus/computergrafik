@@ -1,0 +1,9 @@
+# ninja log v5
+9	1260	7201149216237469	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	86ea403aec1b5c22
+6	5584	7201149259357557	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	1def183da211dce1
+3	388	7201151463833098	CMakeFiles/geometry_test.dir/geometry.cc.obj	9e4e35ecd33f356d
+10	2622	7201150132422616	lib/libgtest.a	e57eeb976319e0b0
+5	1069	7201151470626799	CMakeFiles/geometry_test.dir/geometry_test.cc.obj	9e5045b86704071d
+8	46	7201151460407323	lib/libgtest_main.a	a91ee36f76f59a12
+2	191	7201154144307223	CMakeFiles/geometry_test.dir/math.cc.obj	5d235c653fb712b6
+195	2651	7201154168855237	geometry_test.exe	d998e9e3240669b3
