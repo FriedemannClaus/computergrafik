@@ -73,6 +73,15 @@ Sphere<FLOAT,N>::Sphere(Vector<FLOAT,N> center, FLOAT radius)
 {
 }
 
+template<class FLOAT, size_t N>
+bool Sphere<FLOAT, N>::intersects(Sphere<FLOAT, N> sphere) const {
+    Vector<FLOAT, N> centerToCenter = sphere.center - this->center;
+    if(centerToCenter.square_of_length() <= pow(sphere.radius + this->radius,2)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 // solution via
 // (g(t) - center )^2  = ( (ray.origin - center) + t ray.direction)^2 = r^2 

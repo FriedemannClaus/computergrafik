@@ -95,14 +95,12 @@ public:
   FLOAT intersects(const Ray<FLOAT, N> &ray) const;
 
   // returns true iff this Sphere intersects with the given sphere
-  /*
+  // this was auskommentiert
   bool intersects(Sphere<FLOAT, N> sphere) const;
-  */
   
-  // returns true iff the given point is inside this Sphere or on its surface
-  /*
+  // returns true if the given point is inside this Sphere or on its surface
+  // this was auskommentiert
   bool inside(const Vector<FLOAT, N> p) const;
-  */
 };
 
 template <class FLOAT, size_t N>

@@ -135,7 +135,7 @@ TEST(AABB, SweepIntersects2df_5) {
   EXPECT_NEAR(0.0, normal[1], 0.00001);
 }
 
-/*
+
 TEST(SPHERE, Intersects2dfWithSphere_1) {
   Sphere2df sphere1 = { {0.0, 0.0}, 1.0 };
   Sphere2df sphere2 = { {1.0, 1.0}, 0.5 };
@@ -149,9 +149,47 @@ TEST(SPHERE, Intersects2dfWithSphere_2) {
   
   EXPECT_FALSE( sphere1.intersects(sphere2) );
 }
-*/
 
-/*
+// own tests
+TEST(SPHERE, Intersects2dfWithSphere_3) {
+    Sphere2df sphere1 = { {2.0, 2.0}, 0.5 };
+    Sphere2df sphere2 = { {2.0, 2.0}, 0.5 };
+
+    EXPECT_TRUE( sphere1.intersects(sphere2) );
+}
+TEST(SPHERE, Intersects3dfWithSphere_3) {
+    Sphere3df sphere1 = { {2.0, 2.0, 2.0}, 0.5 };
+    Sphere3df sphere2 = { {2.0, 2.0, 2.0}, 0.5 };
+
+    EXPECT_TRUE( sphere1.intersects(sphere2) );
+}
+
+TEST(SPHERE, Intersects2dfWithSphere_4) {
+    Sphere2df sphere1 = { {2.0, 2.0}, 5.0 };
+    Sphere2df sphere2 = { {2.0, 2.0}, 0.5 };
+    EXPECT_TRUE( sphere1.intersects(sphere2) );
+}
+
+TEST(SPHERE, Intersects2dfWithSphere_5) {
+    Sphere2df sphere1 = { {2.0, 2.0}, 5.0 };
+    Sphere2df sphere2 = { {2.0, 2.0}, 0.5 };
+    EXPECT_TRUE( sphere2.intersects(sphere1) );
+}
+
+TEST(SPHERE, Intersects2dfWithSphere_Touching) {
+    Sphere2df sphere1 = { {2.0, 2.0}, 0.5 };
+    Sphere2df sphere2 = { {3.0, 2.0}, 0.5 };
+
+    EXPECT_TRUE( sphere1.intersects(sphere2) );
+}
+
+TEST(SPHERE, Intersects2dfWithSphere_Not_Touching) {
+    Sphere2df sphere1 = { {2.0, 2.0}, 0.5 };
+    Sphere2df sphere2 = { {3.5, 2.0}, 0.5 };
+
+    EXPECT_FALSE( sphere1.intersects(sphere2) );
+}
+
 TEST(SPHERE, Intersects2dfWithRay_1) {
   Sphere2df sphere = { {0.0, 0.0}, 1.0 };
   Ray2df ray{ {-2.0, -3.0}, {1.0, 1.0} };
@@ -253,13 +291,32 @@ TEST(SPHERE, Intersects3dfWithRay_7) {
   EXPECT_TRUE( sphere.intersects(ray, context) );
 }
 
-*/
 
-/*
+
+
 TEST(SPHERE, Inside_1) {
   Sphere3df sphere = { {3.0f, 3.0f, 0.0f}, 3.0f };
   
   EXPECT_TRUE( sphere.inside( Vector3df{3.5f, 3.0f, 0.0f}) );
+}
+
+// own tests
+TEST(SPHERE, Inside_Negative_Numbers) {
+    Sphere3df sphere = { {3.0f, -2.0f, -6.0f}, 3.0f};
+
+    EXPECT_TRUE( sphere.inside( Vector3df{3.5f, -3.5f, -4.5f}));
+}
+
+TEST(SPHERE, Inside_On_Surface) {
+    Sphere3df sphere = { {3.0f, -2.0f, -6.0f}, 3.0f};
+
+    EXPECT_TRUE( sphere.inside( Vector3df{3.0f, -5.0f, -6.0f}));
+}
+
+TEST(SPHERE, Inside_Same_Sphere) {
+    Sphere3df sphere = { {3.0f, -2.0f, -6.0f}, 3.0f};
+
+    EXPECT_TRUE( sphere.inside( Vector3df{3.0f, -2.0f, -6.0f}));
 }
 
 TEST(SPHERE, NotInside_1) {
@@ -267,7 +324,13 @@ TEST(SPHERE, NotInside_1) {
   
   EXPECT_FALSE( sphere.inside( Vector3df{-0.5f, 0.0f, 0.0f}) );
 }
-*/
+
+TEST(SPHERE, NotInside_Negative_Numbers) {
+    Sphere3df sphere = { {-5.0f, 4.0f, 3.0f}, 2.0f };
+
+    EXPECT_FALSE( sphere.inside( Vector3df{3.5f, -2.0f, 1.0f}) );
+}
+
 TEST(TRIANGLE, Intersects3dfWithRay_1) {
   Triangle3df triangle = { {0.0, 0.0, 0.0}, {0.0, 3.0, 0.0},{3.0, 0.0, 0.0}  };
   Ray3df ray{ {0.0, 0.0, 2.0}, {0.0, 0.0, -1.0} };
