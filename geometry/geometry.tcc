@@ -83,6 +83,16 @@ bool Sphere<FLOAT, N>::intersects(Sphere<FLOAT, N> sphere) const {
     }
 }
 
+template<class FLOAT, size_t N>
+bool Sphere<FLOAT, N>::inside(const Vector<FLOAT, N> p) const {
+    Vector<FLOAT, N> centerToP = p - center;
+    if(std::abs(centerToP.length()) <= radius) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // solution via
 // (g(t) - center )^2  = ( (ray.origin - center) + t ray.direction)^2 = r^2 
 // and abc-formula
@@ -198,4 +208,5 @@ bool refract(FLOAT refraction_index, Vector<FLOAT, N> normal, Vector<FLOAT, N> d
    
    return true;
 }
+
 
