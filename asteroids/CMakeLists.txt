@@ -6,8 +6,39 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_compile_options(-g -Wall -Wextra -Wpedantic -Wl,--stack,16777216)
 
+#Google Test
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        # Specify the commit you depend on and update it regularly.
+        URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+
+#SDL2
+add_subdirectory(SDL-release-2.28.4 EXCLUDE_FROM_ALL)
+#SDL2_mixer
+add_subdirectory(SDL_mixer-release-2.6.3)
+
+#include_directories(${CMAKE_SOURCE_DIR}/libs/SDL2_mixer/include)
+
+
 add_executable(main_game game.cc math.cc geometry.cc sdl2_renderer.cc sound.cc main_game.cc physics.cc sdl2_game_controller.cc timer.cc)
-target_link_libraries(main_game SDL2 SDL2_mixer)
+#target_link_libraries(main_game SDL2 SDL2_mixer)
+# SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
+if(TARGET SDL2::SDL2main)
+    # It has an implicit dependency on SDL2 functions, so it MUST be added before SDL2::SDL2 (or SDL2::SDL2-static)
+    target_link_libraries(main_game PRIVATE SDL2::SDL2main)
+endif()
+
+# Link to the actual SDL2 library. SDL2::SDL2 is the shared SDL library, SDL2::SDL2-static is the static SDL libarary.
+target_link_libraries(main_game PRIVATE SDL2::SDL2 SDL_mixer-release-2.6.3/include/SDL_mixer.h)
+
+#target_link_libraries(main_game PRIVATE SDL2_mixer::SDL2_mixer)
+#target_link_libraries(main_game )
 
 
 enable_testing()
