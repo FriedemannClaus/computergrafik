@@ -36,7 +36,7 @@ template <class FLOAT, size_t N>
 bool AxisAlignedBoundingBox<FLOAT, N>::intersects(AxisAlignedBoundingBox<FLOAT,N> aabb, Vector<FLOAT, N> direction) const {
   AxisAlignedBoundingBox<FLOAT,N> center_extended = AxisAlignedBoundingBox(center, half_edge_length + aabb.half_edge_length);
 
-  return center_extended.intersects( Ray{ aabb.center, direction} );
+  return center_extended.intersects(Ray{aabb.center,direction});
 }
 
 template <class FLOAT, size_t N>
