@@ -18,3 +18,5 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(geometry_test geometry_test.cc math.cc geometry.cc)
 target_link_libraries(geometry_test gtest gtest_main)
+
+add_executable(raytracer raytracer.cc math.cc geometry.cc)
