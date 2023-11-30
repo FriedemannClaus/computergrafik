@@ -114,10 +114,7 @@ public:
     float distance;
     float aspect_ratio;
 
-    Camera(Vector<float,3> eye, Vector<float,3> direction, Vector<float,3> up, float width, float height, float distance, float aspect_ratio) {
-        this->eye = eye;
-        this->direction = direction;
-        this->up = up;
+    Camera(Vector3df eye, Vector3df direction, Vector3df up, float width, float height, float distance, float aspect_ratio): eye(eye), direction(direction), up(up){
         this->width = width;
         this->height = height;
         this->distance = distance;
@@ -135,7 +132,6 @@ public:
 class Screen {
 public:
     std::vector<Vector3df> pixels;
-
     int width;
     int height;
   Screen(int width, int height): pixels(){
@@ -153,6 +149,7 @@ public:
           << static_cast<int>(pixel[2] * 255) << "\n";
     }
     //write into RenderedImage.ppm
+    std::cout << "writing file";
     std::ofstream file("RenderedImage.ppm");
   }
 };
