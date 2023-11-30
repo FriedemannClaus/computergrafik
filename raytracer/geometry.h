@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-// contains geometric shapes and related stuff, like spheres, triangles, intersection algorithms.
+// contains geometric shapes and related stuff, like objects, triangles, intersection algorithms.
 
 
 template <class FLOAT, size_t N>

@@ -41,7 +41,7 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = C$:/Users/Friedemann/Documents/GitHub/computergrafik/math/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target math_test
+# WorldObject build statements for EXECUTABLE target math_test
 
 
 #############################################
@@ -227,7 +227,7 @@ build _deps/googletest-build/install/strip: phony _deps/googletest-build/CMakeFi
 # =============================================================================
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target gmock
+# WorldObject build statements for STATIC_LIBRARY target gmock
 
 
 #############################################
@@ -262,7 +262,7 @@ build lib/libgmock.a: CXX_STATIC_LIBRARY_LINKER__gmock_Debug _deps/googletest-bu
   TARGET_PDB = bin\libgmockpdb_debug_postfix-NOTFOUND.pdb
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target gmock_main
+# WorldObject build statements for STATIC_LIBRARY target gmock_main
 
 
 #############################################
@@ -367,7 +367,7 @@ build _deps/googletest-build/googlemock/install/strip: phony _deps/googletest-bu
 # =============================================================================
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target gtest
+# WorldObject build statements for STATIC_LIBRARY target gtest
 
 
 #############################################
@@ -402,7 +402,7 @@ build lib/libgtest.a: CXX_STATIC_LIBRARY_LINKER__gtest_Debug _deps/googletest-bu
   TARGET_PDB = bin\libgtestpdb_debug_postfix-NOTFOUND.pdb
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target gtest_main
+# WorldObject build statements for STATIC_LIBRARY target gtest_main
 
 
 #############################################
