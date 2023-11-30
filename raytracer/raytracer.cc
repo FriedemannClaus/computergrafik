@@ -66,67 +66,26 @@
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
 
 
-int main(void) {
-  // Bildschirm erstellen
-  // Kamera erstellen
-  // Für jede Pixelkoordinate x,y
-  //   Sehstrahl für x,y mit Kamera erzeugen
-  //   Farbe mit raytracing-Methode bestimmen
-  //   Beim Bildschirm die Farbe für Pixel x,y, setzten
-
-  Scene scene = Scene();
-  scene.add_object(Sphere(Vector3df(0, 0, 0), 1));
-  scene.add_object(Sphere(Vector3df(0, 0, 2), 1));
-  scene.add_object(Sphere(Vector3df(0, 0, 4), 1));
-
-  Screen screen = Screen(640, 480);
-  Camera camera = Camera(Vector3df(0, 0, 0), Vector3df(0, 0, 1), Vector3df(0, 1, 0), 1, 1, 1, 1);
-    for (int x = 0; x < screen.width; x++) {
-        for (int y = 0; y < screen.height; y++) {
-        Ray ray = camera.generate_ray(x, y);
-        Color color = raytrace(ray, scene);
-        screen.set_pixel(x, y, color);
-        }
-    }
-    screen.write_ppm(std::cout);
-  return 0;   
-}
-
-//raytrace method
-Color raytrace(Ray ray){
-    //find the closest object
-    intersects(Ray ray, Scene scene){
-        closestObject = nullptr;
-        //for all objects
-        for (int i = 0; i < scene.objects.size(); i++){
-            //if the ray intersects with the object
-            if (scene.objects[i].intersects(ray)){
-                //return the object
-                closestObject = scene.objects[i];
-            }
-        }
-    }
-    //if there is no object, return background color
-    //else
-    //return the color of the object
-    return closestObject.color;
-}
+const float KANTENLAENGE = 10.0;
+const float TIEFE_MITTELPUNKT = 20.0;
+const float RADIUS_RIESENKUGELN = 1000.0;
 
 class Scene {
 public:
-    std::vector<Object> objects;
-    std::vector<Light> lights;
-    Scene(){
-        objects = std::vector<Object>();
-        lights = std::vector<Light>();
+    Vector3df light;
+    std::vector<Sphere3df> spheres{};
+public:
+    Scene(Vector3df light) : light(light) {
+        spheres = std::vector<Sphere3df>();
     }
-    void add_object(Object object){
-        objects.push_back(object);
+    void add_object(Sphere3df sphere){
+        spheres.push_back(sphere);
     }
-    void add_light(Light light){
-        lights.push_back(light);
-    }
+//    void add_light(Light light){
+//        lights.push_back(light);
+//    }
 };
+
 
 class Camera{
 public:
@@ -137,18 +96,13 @@ public:
     float height;
     float distance;
     float aspect_ratio;
-    Camera(Vector3df eye, Vector3df direction, Vector3df up, float width, float height, float distance, float aspect_ratio){
-        eye = eye;
-        direction = direction;
-        up = up;
-        width = width;
-        height = height;
-        distance = distance;
-        aspect_ratio = aspect_ratio;
-    }
-    Ray generate_ray(int x, int y){
+
+    Camera(Vector<float,3> eye, Vector<float,3> direction, Vector<float,3> up, float width, float height, float distance, float aspect_ratio);
+
+    Ray<float,3u> generate_ray(int x, int y){
         Vector3df ray_direction = direction + (x - width/2) * (width/2) * aspect_ratio * up + (y - height/2) * (height/2) * up;
-        return Ray(eye, ray_direction);
+
+        return Ray<float,3u>(eye, ray_direction);
     }
 
 };
@@ -156,7 +110,7 @@ public:
 class Color {
 public:
   float r, g, b;
-  Color(float r, float g, float b) : r(r), g(g), b(b) {}
+  Color(float r, float g, float b);
 };
 
 class Screen {
@@ -180,10 +134,65 @@ public:
           << static_cast<int>(pixel.g * 255) << " "
           << static_cast<int>(pixel.b * 255) << "\n";
     }
-    import FILE;
     File file = out;
     //write into RenderedImage.ppm
     std::ofstream file("RenderedImage.ppm");
   }
 };
 
+
+
+int main() {
+    // Bildschirm erstellen
+    // Kamera erstellen
+    // Für jede Pixelkoordinate x,y
+    //   Sehstrahl für x,y mit Kamera erzeugen
+    //   Farbe mit raytracing-Methode bestimmen
+    //   Beim Bildschirm die Farbe für Pixel x,y, setzten
+
+
+    Vector3df light = {0.0,KANTENLAENGE/2, TIEFE_MITTELPUNKT};
+    Scene scene = Scene(light);
+    //Sphere(Vector<FLOAT,N> center, FLOAT radius)
+    Vector3df centerLeft = {-1005.0, 0.0, -20.0};
+    Vector3df centerRight = {1005.0, 0.0, -20.0};
+    Vector3df centerTop = {0, 1005.0, -20.0};
+    scene.add_object(Sphere(centerLeft, 1000.0f));
+    scene.add_object(Sphere(centerRight, 1000.0f));
+    scene.add_object(Sphere(centerTop, 1000.0f));
+
+    Screen screen = Screen(500, 500);
+
+    Vector3df eye = {0.0, 0.0, 0.0};
+    Vector3df direction = {0.0, 0.0, 1.0};
+    Vector3df up = {0.0, 1.0, 0.0};
+    Camera camera = Camera(eye, direction, up, 1, 1, 15, 1);
+    for (int x = 0; x < screen.width; x++) {
+        for (int y = 0; y < screen.height; y++) {
+            Ray ray = camera.generate_ray(x, y);
+            Color color = raytrace(ray, scene);
+            screen.set_pixel(x, y, color);
+        }
+    }
+    screen.write_ppm(std::cout);
+    return 0;
+}
+
+
+//raytrace method
+Sphere3df raytrace(Ray<float,3u> ray, Scene scene){ //Return Type should be Color
+    //find the closest object
+    Sphere3df closestObject = scene.spheres[0];
+    //for all objects
+    for (int i = 0; i < scene.spheres.size(); i++){
+        //if the ray intersects with the object
+        if (scene.spheres[i].intersects(ray)){
+            //return the object
+            closestObject = scene.spheres[i];
+        }
+    }
+    //if there is no object, return background color
+    //else
+    //return the color of the object
+    return closestObject; //.color
+}
