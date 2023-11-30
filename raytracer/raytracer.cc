@@ -103,64 +103,86 @@ public:
     }
 };
 
-
-class Camera{
-public:
-    Vector3df eye;
-    Vector3df direction;
-    Vector3df up;
-    float width;
-    float height;
-    float distance;
-    float aspect_ratio;
-
-    Camera(Vector3df eye, Vector3df direction, Vector3df up, float width, float height, float distance, float aspect_ratio): eye(eye), direction(direction), up(up){
-        this->width = width;
-        this->height = height;
-        this->distance = distance;
-        this->aspect_ratio = aspect_ratio;
-    }
-
-    Ray<float,3u> generate_ray(int x, int y){
-        Vector3df ray_direction = direction + (x - width/2) * (width/2) * aspect_ratio * up + (y - height/2) * (height/2) * up;
-
-        return Ray<float,3u>(eye, ray_direction);
-    }
-
-};
-
 class Screen {
 public:
     std::vector<Vector3df> pixels;
     int width;
     int height;
-  Screen(int width, int height): pixels(){
-    width = width;
-    height = height;
-  }
-  void set_pixel(int x, int y, Vector3df color) {
-    pixels[y * width + x] = color;
-  }
-  void write_ppm(std::ostream &out) {
-    out << "P3\n" << width << " " << height << "\n255\n";
-    for (auto pixel : pixels) {
-      out << static_cast<int>(pixel[0] * 255) << " "
-          << static_cast<int>(pixel[1] * 255) << " "
-          << static_cast<int>(pixel[2] * 255) << "\n";
+    Screen(int width, int height): pixels(){
+        this->width = width;
+        this->height = height;
     }
-    //write into RenderedImage.ppm
-    std::cout << "writing file";
-    std::ofstream file("RenderedImage.ppm");
-  }
+    void set_pixel(int x, int y, Vector3df color) {
+        std::cout << "setting pixel " << x << y << "with color" << color[0] <<", " << color[1] << ", " << color[2] << "\n";
+        //pixels[y * width + x] = color;
+        pixels.push_back(color);
+        std::cout << "finished setting the pixel, back to main\n";
+    }
+    void write_ppm() {
+        //open a file
+        std::ofstream file("RenderedImage.ppm");
+
+        file << "P3\n" << width << " " << height << "\n255\n";
+        for (auto pixel : pixels) {
+            file << static_cast<int>(pixel[0] * 255) << " "
+                 << static_cast<int>(pixel[1] * 255) << " "
+                 << static_cast<int>(pixel[2] * 255) << "\n";
+        }
+    }
+};
+
+class Camera{
+public:
+    Screen screen;
+    Vector3df eye;
+    Vector3df direction;
+    Vector3df up;
+    Vector3df w;
+    Vector3df u;
+    Vector3df v;
+    float width;
+    float height;
+    float distance;
+    float aspect_ratio;
+    float l;
+    float r;
+    float t;
+    float b;
+
+
+    Camera(Screen screen, Vector3df eye, Vector3df direction, Vector3df up, float width, float height, float distance, float aspect_ratio, Vector3df u, Vector3df v, Vector3df w): screen(screen), eye(eye), direction(direction), up(up), u(u), v(v), w(w){
+        this->width = width;
+        this->height = height;
+        this->distance = distance;
+        this->aspect_ratio = aspect_ratio;
+        this->l = -width/2;
+        this->r = width/2;
+        this->t = height/2;
+        this->b = -height/2;
+    }
+
+    Ray<float,3u> generate_ray(int x, int y){
+        float p_u = l + (r-l) * (x + 0.5)/screen.width;
+        float p_v = b + (t-b) * (y + 0.5)/screen.height;
+
+        Vector3df minusOne = {-1.0, -1.0, -1.0};
+
+        //Vector3df ray_direction = direction + (x - width/2) * (width/2) * aspect_ratio * up + (y - height/2) * (height/2) * up;
+        Vector3df ray_direction = minusOne * direction * w + p_u * u + p_v * v; //-dw' + p_uu' + p_v * v'
+        return Ray<float,3u>(eye, ray_direction);
+    }
+
 };
 
 Vector3df raytrace(Ray<float, 3> ray, Scene scene) {
     //find the closest object
     WorldObject closestObject = scene.objects[0];
     //for all objects
-    for (int i = 0; i < scene.objects.size(); i++){
+    for (int i = 0; i < (int) scene.objects.size(); i++){
         //if the ray intersects with the object
+        std::cout << "checking for intersection object Nr: " << i << "\n";
         if (scene.objects[i].intersects(ray)){
+            std::cout << "found an intersection\n";
             //return the object
             closestObject = scene.objects[i];
         }
@@ -205,19 +227,26 @@ int main() {
     scene.add_object(objectBottom);
 
 
-    Screen screen = Screen(500, 500);
+    Screen screen = Screen(20, 20);
 
     Vector3df eye = {0.0, 0.0, 0.0};
     Vector3df direction = {0.0, 0.0, 1.0};
     Vector3df up = {0.0, 1.0, 0.0};
-    Camera camera = Camera(eye, direction, up, 1, 1, 15, 1);
+    Vector3df w = Vector3df {0.0, 0.0, 1.0};
+    Vector3df u = Vector3df {1.0, 0.0, 0.0};
+    Vector3df v = Vector3df {0.0, 1.0, 0.0};
+    Camera camera = Camera(screen, eye, direction, up, 10, 10, 15, 1, u, v, w);
+    std::cout << "before iterating\n" << "width: " << screen.width << " height: " << screen.height << "\n";
     for (int x = 0; x < screen.width; x++) {
         for (int y = 0; y < screen.height; y++) {
+            std::cout << "x: " << x << " y: " << y << " this is great, im iterating the rays\n";
             Ray<float, 3> ray = camera.generate_ray(x, y);
             Vector3df color = raytrace(ray, scene);
+            std::cout << "got back the color" << color[0] <<", " << color[1] << ", " << color[2] << "\n";
             screen.set_pixel(x, y, color);
         }
     }
-    screen.write_ppm(std::cout);
+    std::cout << "writing the file\n";
+    screen.write_ppm();
     return 0;
 }
