@@ -15,107 +15,16 @@
 // Der Bildschirm hat eine Auflösung (Breite x Höhe)
 // Kann zur Ausgabe einer PPM-Datei verwendet werden oder
 // mit SDL2 implementiert werden.
-
-
-
-// Eine "Kamera", die von einem Augenpunkt aus in eine Richtung senkrecht auf ein Rechteck (das Bild) zeigt.
-// Für das Rechteck muss die Auflösung oder alternativ die Pixelbreite und -höhe bekannt sein.
-// Für ein Pixel mit Bildkoordinate kann ein Sehstrahl erzeugt werden.
-
-
-
-// Für die "Farbe" benötigt man nicht unbedingt eine eigene Datenstruktur.
-// Sie kann als Vector3df implementiert werden mit Farbanteil von 0 bis 1.
-// Vor Setzen eines Pixels auf eine bestimmte Farbe (z.B. 8-Bit-Farbtiefe),
-// kann der Farbanteil mit 255 multipliziert  und der Nachkommaanteil verworfen werden.
-
-
-// Das "Material" der Objektoberfläche mit ambienten, diffusem und reflektiven Farbanteil.
-
-
-
-// Ein "Objekt", z.B. eine Kugel oder ein Dreieck, und dem zugehörigen Material der Oberfläche.
-// Im Prinzip ein Wrapper-Objekt, das mindestens Material und geometrisches Objekt zusammenfasst.
-// Kugel und Dreieck finden Sie in geometry.h/tcc
-
-
-// verschiedene Materialdefinition, z.B. Mattes Schwarz, Mattes Rot, Reflektierendes Weiss, ...
-// im wesentlichen Variablen, die mit Konstruktoraufrufen initialisiert werden.
-
-
-// Die folgenden Werte zur konkreten Objekten, Lichtquellen und Funktionen, wie Lambertian-Shading
-// oder die Suche nach einem Sehstrahl für das dem Augenpunkt am nächsten liegenden Objekte,
-// können auch zusammen in eine Datenstruktur für die gesamte zu
-// rendernde "Szene" zusammengefasst werden.
-
-// Die Cornelbox aufgebaut aus den Objekten
-// Am besten verwendet man hier einen std::vector< ... > von Objekten.
-
-// Punktförmige "Lichtquellen" können einfach als Vector3df implementiert werden mit weisser Farbe,
-// bei farbigen Lichtquellen müssen die entsprechenden Daten in Objekt zusammengefaßt werden
-// Bei mehreren Lichtquellen können diese in einen std::vector gespeichert werden.
-
-// Sie benötigen eine Implementierung von Lambertian-Shading, z.B. als Funktion
-// Benötigte Werte können als Parameter übergeben werden, oder wenn diese Funktion eine Objektmethode eines
-// Szene-Objekts ist, dann kann auf die Werte teilweise direkt zugegriffen werden.
-// Bei mehreren Lichtquellen muss der resultierende diffuse Farbanteil durch die Anzahl Lichtquellen geteilt werden.
-
-// Für einen Sehstrahl aus allen Objekte, dasjenige finden, das dem Augenpunkt am nächsten liegt.
-// Am besten einen Zeiger auf das Objekt zurückgeben. Wenn dieser nullptr ist, dann gibt es kein sichtbares Objekt.
-
-// Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
-
-
-const float KANTENLAENGE = 10.0;
-const float TIEFE_MITTELPUNKT = 20.0;
-const float RADIUS_RIESENKUGELN = 1000.0;
-
-class Material{
-public:
-    Vector3df color;
-    float shininess;
-    float reflectivity;
-    float refraction_index;
-
-    Material(Vector3df color, float shininess, float reflectivity, float refraction_index) : color(color), shininess(shininess), reflectivity(reflectivity), refraction_index(refraction_index) {}
-};
-
-class WorldObject {
-public:
-    Sphere3df sphere;
-    Material material;
-    WorldObject(Sphere3df sphere, Material material) : sphere(sphere), material(material) {}
-    bool intersects(Ray<float,3u> ray){
-        return sphere.intersects(ray);
-    };
-};
-
-class Scene {
-public:
-    Vector3df light;
-    std::vector<WorldObject> objects;
-
-public:
-    Scene(Vector3df light): light(light), objects() {}
-
-    void add_object(WorldObject object){
-        objects.push_back(object);
-    }
-};
-
 class Screen {
 public:
-    std::vector<Vector3df> pixels;
     int width;
     int height;
-    Screen(int width, int height): pixels(){
-        this->width = width;
-        this->height = height;
-    }
+    std::vector<Vector3df> pixels;
+    Screen(int w, int h) : width(w), height(h), pixels(w * h, Vector3df{0.0, 0.0, 0.0}) {}
+
     void set_pixel(int x, int y, Vector3df color) {
         std::cout << "setting pixel " << x << y << "with color" << color[0] <<", " << color[1] << ", " << color[2] << "\n";
-        //pixels[y * width + x] = color;
-        pixels.push_back(color);
+        pixels[y * width + x] = color;
         std::cout << "finished setting the pixel, back to main\n";
     }
     void write_ppm() {
@@ -123,13 +32,23 @@ public:
         std::ofstream file("RenderedImage.ppm");
 
         file << "P3\n" << width << " " << height << "\n255\n";
-        for (auto pixel : pixels) {
-            file << static_cast<int>(pixel[0] * 255) << " "
-                 << static_cast<int>(pixel[1] * 255) << " "
-                 << static_cast<int>(pixel[2] * 255) << "\n";
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                const Vector3df& color = pixels[y * width + x];
+                file << static_cast<int>(color[0] * 255) << " "
+                         << static_cast<int>(color[1] * 255) << " "
+                         << static_cast<int>(color[2] * 255) << " ";
+            }
+            file << "\n";
         }
+        file.close();
     }
 };
+
+
+// Eine "Kamera", die von einem Augenpunkt aus in eine Richtung senkrecht auf ein Rechteck (das Bild) zeigt.
+// Für das Rechteck muss die Auflösung oder alternativ die Pixelbreite und -höhe bekannt sein.
+// Für ein Pixel mit Bildkoordinate kann ein Sehstrahl erzeugt werden.
 
 class Camera{
 public:
@@ -174,24 +93,108 @@ public:
 
 };
 
+// Für die "Farbe" benötigt man nicht unbedingt eine eigene Datenstruktur.
+// Sie kann als Vector3df implementiert werden mit Farbanteil von 0 bis 1.
+// Vor Setzen eines Pixels auf eine bestimmte Farbe (z.B. 8-Bit-Farbtiefe),
+// kann der Farbanteil mit 255 multipliziert  und der Nachkommaanteil verworfen werden.
+
+
+// Das "Material" der Objektoberfläche mit ambienten, diffusem und reflektiven Farbanteil.
+class Material{
+public:
+    Vector3df color;
+    float shininess;
+    float reflectivity;
+    float refraction_index;
+
+    Material(Vector3df color, float shininess, float reflectivity, float refraction_index) : color(color), shininess(shininess), reflectivity(reflectivity), refraction_index(refraction_index) {}
+};
+
+
+// Ein "Objekt", z.B. eine Kugel oder ein Dreieck, und dem zugehörigen Material der Oberfläche.
+// Im Prinzip ein Wrapper-Objekt, das mindestens Material und geometrisches Objekt zusammenfasst.
+// Kugel und Dreieck finden Sie in geometry.h/tcc
+class WorldObject {
+public:
+    Sphere3df sphere;
+    Material material;
+    WorldObject(Sphere3df sphere, Material material) : sphere(sphere), material(material) {}
+    float intersects(Ray<float,3u> ray){
+        return sphere.intersects(ray);
+    };
+};
+
+// verschiedene Materialdefinition, z.B. Mattes Schwarz, Mattes Rot, Reflektierendes Weiss, ...
+// im wesentlichen Variablen, die mit Konstruktoraufrufen initialisiert werden.
+
+
+// Die folgenden Werte zur konkreten Objekten, Lichtquellen und Funktionen, wie Lambertian-Shading
+// oder die Suche nach einem Sehstrahl für das dem Augenpunkt am nächsten liegenden Objekte,
+// können auch zusammen in eine Datenstruktur für die gesamte zu
+// rendernde "Szene" zusammengefasst werden.
+class Scene {
+public:
+    Vector3df light;
+    std::vector<WorldObject> objects;
+
+public:
+    Scene(Vector3df light): light(light), objects() {}
+
+    void add_object(WorldObject object){
+        objects.push_back(object);
+    }
+
+
+// Die Cornelbox aufgebaut aus den Objekten
+// Am besten verwendet man hier einen std::vector< ... > von Objekten.
+
+// Punktförmige "Lichtquellen" können einfach als Vector3df implementiert werden mit weisser Farbe,
+// bei farbigen Lichtquellen müssen die entsprechenden Daten in Objekt zusammengefaßt werden
+// Bei mehreren Lichtquellen können diese in einen std::vector gespeichert werden.
+
+// Sie benötigen eine Implementierung von Lambertian-Shading, z.B. als Funktion
+// Benötigte Werte können als Parameter übergeben werden, oder wenn diese Funktion eine Objektmethode eines
+// Szene-Objekts ist, dann kann auf die Werte teilweise direkt zugegriffen werden.
+// Bei mehreren Lichtquellen muss der resultierende diffuse Farbanteil durch die Anzahl Lichtquellen geteilt werden.
+
+// Für einen Sehstrahl aus allen Objekte, dasjenige finden, das dem Augenpunkt am nächsten liegt.
+// Am besten einen Zeiger auf das Objekt zurückgeben. Wenn dieser nullptr ist, dann gibt es kein sichtbares Objekt.
+    WorldObject findNearestObject(Ray3df ray){
+        auto closestObject = objects[0]; //TODO: check if this is a good idea. Should always find an object
+        float minimal_t = INFINITY;
+
+        for (int i = 0; i < (int) objects.size(); i++){
+            //if the ray intersects with the object
+            std::cout << "checking for intersection object Nr: " << i << "\n";
+            float t = objects[i].intersects(ray);
+            if (t > 0 && t < minimal_t){
+                std::cout << "found an possible/nearer intersection\n";
+                closestObject = objects[i];
+                minimal_t = t;
+            }
+        }
+
+        return closestObject;
+    }
+
+};
+
+// Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
+
+
+
 Vector3df raytrace(Ray<float, 3> ray, Scene scene) {
     //find the closest object
-    WorldObject closestObject = scene.objects[0];
-    //for all objects
-    for (int i = 0; i < (int) scene.objects.size(); i++){
-        //if the ray intersects with the object
-        std::cout << "checking for intersection object Nr: " << i << "\n";
-        if (scene.objects[i].intersects(ray)){
-            std::cout << "found an intersection\n";
-            //return the object
-            closestObject = scene.objects[i];
-        }
-    }
+    WorldObject closestObject = scene.findNearestObject(ray);
     //if there is no object, return background color
     //else
     //return the color of the object
     return closestObject.material.color; //.color
 }
+
+const float KANTENLAENGE = 10.0;
+const float TIEFE_MITTELPUNKT = 20.0;
+const float RADIUS_RIESENKUGELN = 1000.0;
 
 //main() must be the last function in the file. Otherwise C++ won't get it.
 int main() {
@@ -210,24 +213,28 @@ int main() {
     Vector3df centerRight = {1005.0, 0.0, -20.0};
     Vector3df centerTop = {0, 1005.0, -20.0};
     Vector3df centerBottom = {0, -1005.0, -20.0};
+    Vector3df centerBack = {0, 0, -1025.0};
 
     Sphere3df sphereLeft = Sphere3df(centerLeft, RADIUS_RIESENKUGELN);
     Sphere3df sphereRight = Sphere3df(centerRight, RADIUS_RIESENKUGELN);
     Sphere3df sphereTop = Sphere3df(centerTop, RADIUS_RIESENKUGELN);
     Sphere3df sphereBottom = Sphere3df(centerBottom, RADIUS_RIESENKUGELN);
+    Sphere3df sphereBack = Sphere3df(centerBack, RADIUS_RIESENKUGELN);
 
     WorldObject objectLeft = WorldObject(sphereLeft, Material({1.0, 0.0, 0.0}, 0.0, 0.3, 0.0));
     WorldObject objectRight = WorldObject(sphereRight, Material({0.0, 1.0, 0.0}, 0.0, 0.3, 0.0));
-    WorldObject objectTop = WorldObject(sphereTop, Material({0.0, 0.0, 0.0}, 0.0, 0.3, 0.0));
-    WorldObject objectBottom = WorldObject(sphereBottom, Material({0.0, 0.0, 0.0}, 0.0, 0.3, 0.0));
+    WorldObject objectTop = WorldObject(sphereTop, Material({0.9, 0.9, 0.9}, 0.0, 0.3, 0.0));
+    WorldObject objectBottom = WorldObject(sphereBottom, Material({0.9, 0.9, 0.9}, 0.0, 0.3, 0.0));
+    WorldObject objectBack = WorldObject(sphereBack, Material({0.9, 0.9, 0.9}, 0.0, 0.3, 0.0));
 
     scene.add_object(objectLeft);
     scene.add_object(objectRight);
     scene.add_object(objectTop);
     scene.add_object(objectBottom);
+    scene.add_object(objectBack);
 
 
-    Screen screen = Screen(20, 20);
+    Screen screen = Screen(100, 100);
 
     Vector3df eye = {0.0, 0.0, 0.0};
     Vector3df direction = {0.0, 0.0, 1.0};
