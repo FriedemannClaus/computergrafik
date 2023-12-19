@@ -13,7 +13,7 @@ const float KANTENLAENGE = 10.0f;
 const float TIEFE_MITTELPUNKT = 20.0f;
 const float RADIUS_RIESENKUGELN = 1000.0f;
 const float GRUNDHELLIGKEIT = 0.26f;
-const float EPSILON = 0.0001f;
+const float EPSILON = 0.001f;
 
 // Ein "Bildschirm", der das Setzen eines Pixels kapselt
 // Der Bildschirm hat eine Auflösung (Breite x Höhe)
@@ -27,9 +27,7 @@ public:
     Screen(int nx, int ny) : nx(nx), ny(ny), pixels(nx * ny, Vector3df{0.0, 0.0, 0.0}) {}
 
     void set_pixel(int x, int y, Vector3df color) {
-        //std::cout << "setting pixel " << x << y << "with color" << color[0] <<", " << color[1] << ", " << color[2] << "\n";
         pixels[y * nx + x] = color;
-        //std::cout << "finished setting the pixel, back to main\n";
     }
     void write_ppm() {
         //open a file
@@ -76,6 +74,7 @@ public:
         this->width = width;
         this->height = height;
         this->distance = distance;
+
         this->l = -width/2;
         this->r = width/2;
         this->t = height/2;
@@ -86,10 +85,6 @@ public:
         float p_u = l + (r-l) * (x + 0.5f)/screen.nx;
         float p_v = b + (t-b) * (y + 0.5f)/screen.ny;
 
-        Vector3df minusOne = {-1.0, -1.0, -1.0};
-
-        //Vector3df ray_direction = direction + (x - nx/2) * (nx/2) * aspect_ratio * up + (y - ny/2) * (ny/2) * up;
-        //Vector3df ray_direction = minusOne * direction * w + p_u * u + p_v * v; //-dw' + p_uu' + p_v * v' //TODO: Didn't work
         Vector3df ray_direction = (Vector3df{0,0,0} -(distance *  w)) + p_u * u + p_v * v;
         ray_direction.normalize();
         return Ray<float,3u>(eye, ray_direction);
@@ -123,12 +118,6 @@ public:
     Sphere3df sphere;
     Material material;
     WorldObject(Sphere3df sphere, Material material) : sphere(sphere), material(material) {}
-    bool intersects(Ray<float,3u> ray, Intersection_Context<float, 3> hitContext){
-        return sphere.intersects(ray, hitContext);
-    };
-    float intersects(Ray<float,3u> ray){
-        return sphere.intersects(ray);
-    };
 };
 
 // verschiedene Materialdefinition, z.B. Mattes Schwarz, Mattes Rot, Reflektierendes Weiss, ...
@@ -166,18 +155,12 @@ public:
 // Bei mehreren Lichtquellen muss der resultierende diffuse Farbanteil durch die Anzahl Lichtquellen geteilt werden.
 
     float lambertian(Vector3df light, Vector3df normal, float kd) {
-
-        // Vektoren vor der Berechnung normalisieren
         Vector3df n = normal;
         n.normalize();
         Vector3df l = light;
         l.normalize();
 
-        // Berechne den Lambertian Shading-Term
-        //Vector3df brightness =  kd * (std::max(0.0f, n * l) * l); //TODO: Vielleicht muss l nicht der Vektor zum Licht vom Auge aus,
         float brightness =  kd * std::max(0.0f, n * l);
-        //sondern der Vektor vom Schnittpunkt zum Licht sein.
-
         return brightness;
     }
 
@@ -185,16 +168,14 @@ public:
 
 // Für einen Sehstrahl aus allen Objekte, dasjenige finden, das dem Augenpunkt am nächsten liegt.
 // Am besten einen Zeiger auf das Objekt zurückgeben. Wenn dieser nullptr ist, dann gibt es kein sichtbares Objekt.
-    WorldObject* findNearestObject(Ray3df ray){ //TODO: check if this is a good idea. Should always find an object
+    WorldObject* findNearestObject(Ray3df ray){
         WorldObject *nearestObject = nullptr;
         float minimal_t = INFINITY;
         Intersection_Context<float, 3> intersectionContext;
         for (WorldObject &o : objects){
             //if the ray intersects with the object
             bool found = o.sphere.intersects(ray, intersectionContext);
-            //std::cout << "checking for intersection object Nr: " << intersectionContext.t << "\n";
             if (found && (intersectionContext.t > 0 + EPSILON) && (intersectionContext.t < minimal_t - EPSILON)){
-                //std::cout << "found an possible/nearer intersection\n";
                 hitContext = intersectionContext;
                 nearestObject = &o;
                 minimal_t = intersectionContext.t;
@@ -239,7 +220,6 @@ Vector3df raytrace(Ray<float, 3> ray, Scene scene, int depth) {
     return color;
 }
 
-//main() must be the last function in the file. Otherwise C++ won't get it.
 int main() {
     // Bildschirm erstellen
     // Kamera erstellen
@@ -303,15 +283,11 @@ int main() {
     Vector3df u = Vector3df {1.0, 0.0, 0.0};
     Vector3df v = Vector3df {0.0, 1.0, 0.0};
     Camera camera = Camera(screen, eye, direction, up, 10.0f, 10.0f, 15.0f, u, v, w);
-    //std::cout << "before iterating\n" << "nx: " << screen.nx << " ny: " << screen.ny << "\n";
     for (int x = 0; x < screen.nx; x++) {
         for (int y = 0; y < screen.ny; y++) {
-            //std::cout << "x: " << x << " y: " << y << " this is great, im iterating the rays\n";
             Ray<float, 3> ray = camera.generate_ray(x, y);
             Vector3df color = raytrace(ray, scene, 3);
             WorldObject* closestObject = scene.findNearestObject(ray);
-            //auto baseColor = closestObject->material.color;
-            //Vector3df color = baseColor;//raytrace(ray, scene);
             auto firstIntersection = scene.hitContext.intersection;
             auto firstNormal = scene.hitContext.normal;
             if(scene.findLightSourcesFromLastHitContext()) {
@@ -322,7 +298,6 @@ int main() {
             screen.set_pixel(x, y, color);
         }
     }
-    //0std::cout << "writing the file\n";
     screen.write_ppm();
     return 0;
 }
