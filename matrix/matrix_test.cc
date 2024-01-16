@@ -60,11 +60,11 @@ TEST(MATRIX, ProductWithVector3df) {
 
 
 TEST(MATRIX, ProductWithMatrix2df) {
-  SquareMatrix3df matrix1 = { {1.0, 2.0},
+  SquareMatrix2df matrix1 = { {1.0, 2.0},
                               {-1.0, 1.5} };
-  SquareMatrix3df matrix2 = { {2.0, -1.0},
+  SquareMatrix2df matrix2 = { {2.0, -1.0},
                               {1.0, 0.0} };
-  SquareMatrix3df matrix = matrix1 * matrix2; 
+  SquareMatrix2df matrix = matrix1 * matrix2;
   
   EXPECT_NEAR( 3.0, matrix.at(0,0), 0.00001);
   EXPECT_NEAR( 1.0, matrix.at(0,1), 0.00001);
@@ -72,6 +72,31 @@ TEST(MATRIX, ProductWithMatrix2df) {
   EXPECT_NEAR( 2.0, matrix.at(1,1), 0.00001);
 }
 
+//own tests:
+TEST(MATRIX, ProductWithMatrix3df) {
+    SquareMatrix3df matrix1 = { {1.0, 1.0, 1.0},
+                                {2.0, 2.0, 2.0},
+                                {3.0, 3.0, 3.0}};
+    SquareMatrix3df matrix2 = { {2.0, 2.0, 2.0},
+                                {3.0, 3.0, 3.0},
+                                {4.0, 4.0, 4.0}};
+    SquareMatrix3df matrix = matrix1 * matrix2;
 
+    EXPECT_NEAR( 12.0, matrix.at(0,0), 0.00001);
+    EXPECT_NEAR( 12.0, matrix.at(2,0), 0.00001);
+    EXPECT_NEAR( 18.0, matrix.at(0,1), 0.00001);
+    EXPECT_NEAR( 18.0, matrix.at(1,1), 0.00001);
+    EXPECT_NEAR( 24.0, matrix.at(0,2), 0.00001);
+    EXPECT_NEAR( 24.0, matrix.at(2,2), 0.00001);
+}
 
+TEST(MATRIX, ProductWithVector2df) {
+    SquareMatrix2df matrix = { {2.0, 0.0},
+                               {3.0, 1.0} };
+    Vector2df vector = {5.0, 1.0};
+    Vector2df product = matrix * vector;
+
+        EXPECT_NEAR(13.0, product[0], 0.00001);
+        EXPECT_NEAR(1.0, product[1], 0.00001);
+    }
 }

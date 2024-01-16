@@ -12,6 +12,10 @@ Vector<FLOAT_TYPE, N>::Vector( std::initializer_list<FLOAT_TYPE> values ) {
   }
 }
 
+//default constructor
+template <class FLOAT_TYPE, std::size_t N>
+Vector<FLOAT_TYPE, N>::Vector() {}
+
 template <class FLOAT_TYPE, size_t N>
 Vector<FLOAT_TYPE, N>::Vector(FLOAT_TYPE angle ) {
   *this = { static_cast<FLOAT_TYPE>( cos(angle) ), static_cast<FLOAT_TYPE>(sin(angle)) };

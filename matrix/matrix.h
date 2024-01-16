@@ -7,8 +7,14 @@
 template <class FLOAT, size_t N>
 class SquareMatrix {
   static_assert(N > 0u);
+
   std::array< Vector<FLOAT,N>, N> matrix;  // values are stored in column (a vector) order
+
+
 public:
+
+    //default constructor
+    SquareMatrix();
   SquareMatrix(std::initializer_list< Vector<FLOAT, N > > values);
     
   // returns reference to the i-th column vector
@@ -23,7 +29,7 @@ public:
   // returns the reference value at the given row and column  
   FLOAT & at(size_t row, size_t column);
   
-  // returns the producut of this SquareMatrix and the given vector
+  // returns the product of this SquareMatrix and the given vector
   Vector<FLOAT,N> operator*(const Vector<FLOAT,N> vector);
 
   //  returns the product of two square matrices

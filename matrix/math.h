@@ -15,6 +15,10 @@ struct Vector {
   // index 0, 1, 2, ... corresponds to x,y,z,... axis
   std::array<FLOAT_TYPE, N> vector;
 
+  //default constructor
+    Vector();
+
+
   // creates a new Vector with the given scalar values
   // if values is empty, then this->vector is initilized with zeros
   // if less than N values are given, then all remaining values of this->vector
@@ -84,6 +88,8 @@ struct Vector {
 template <class F, size_t K>
   friend F operator*(Vector<F, K> vector1, const Vector<F, K> vector2);
 };
+
+
 
 static const long double PI = std::acos(-1.0L);
 
