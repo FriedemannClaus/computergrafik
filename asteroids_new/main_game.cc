@@ -1,4 +1,4 @@
-#define DEBUG_LEVEL  2
+#define DEBUG_LEVEL  0
 
 #include "renderer.h"
 #include "sdl2_renderer.h"
@@ -17,7 +17,6 @@ int main(void);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int CmdShow)
 {
-    std::cout << "WinMain" << std::endl;
     return main();
 }
 #endif
@@ -25,17 +24,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 // sets up the model, view, and controller objects
 // main itself is a controller containing the game main loop
 int main(void) {
-    std::cout << "first" << std::endl;
   Timer timer;
   Game game{};
   SDL2GameController controller = SDL2GameController{game};
   //std::unique_ptr<Renderer> renderer = std::make_unique<SDL2Renderer>(game, "Asteroids");
-  std::unique_ptr<Renderer> renderer = std::make_unique<OpenGLRenderer>(game, "Asteroids");
-  std::cout << "renderer created" << std::endl;
+  std::unique_ptr<Renderer> renderer = std::make_unique<OpenGLRenderer>(game, "Asteroids", 1200, 800);
   renderer->init();
   do {
     debug(1, "game loop begin.");
-    std::cout << "in the loop" << std::endl;
     timer.reset();
     renderer->render();
     controller.do_user_interactions();

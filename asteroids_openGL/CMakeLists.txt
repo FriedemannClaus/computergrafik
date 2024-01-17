@@ -42,6 +42,11 @@ if (WIN32)
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:SDL2::SDL2>" "$<TARGET_FILE_DIR:main_game>"
             VERBATIM
     )
+    add_custom_command(
+            TARGET main_game POST_BUILD
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:glew>" "$<TARGET_FILE_DIR:main_game>"
+            VERBATIM
+    )
 endif()
 
 

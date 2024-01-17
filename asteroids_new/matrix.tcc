@@ -81,8 +81,6 @@ SquareMatrix<F, K> operator*(const SquareMatrix<F, K> factor1, const SquareMatri
     for (size_t i = 0u; i < K; i++) {//Zeilen
         for (size_t j = 0u; j < K; j++) {//Spalten
             for(size_t k = 0u; k < K; k++) {//Stelle
-                std::cout << "i: " << i << " j: " << j << " k: " << k << "\n";
-                std::cout << "adding" << factor1[k][i] << "*" << factor2[j][k] << "\n";
                 result[j][i] += factor1[k][i] * factor2[j][k];
             }
         }

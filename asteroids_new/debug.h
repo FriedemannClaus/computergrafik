@@ -2,7 +2,7 @@
 #define DEBUG_H
 
 #ifndef DEBUG_LEVEL
-#define DEBUG_LEVEL 2
+#define DEBUG_LEVEL 1
 #endif
 
 #include <iostream>

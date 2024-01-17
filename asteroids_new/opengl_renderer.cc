@@ -475,6 +475,16 @@ static Vector2df tile_positions [] = {
                          {0.0f, 768.0f},
                          {0.0f, -768.0f} };
 
+// returns a 4 x 4 transformation matrice that translates an object in the given direction
+SquareMatrix4df create_translation(Vector2df direction) {
+    SquareMatrix4df translation = {{1.0f,         0.0f,         0.0f, 0.0f},
+                                   {0.0f,         1.0f,         0.0f, 0.0f},
+                                   {0.0f,         0.0f,         1.0f, 0.0f},
+                                   {direction[0], direction[1], 0.0f, 1.0f}
+    };
+    return translation;
+}
+
 void OpenGLRenderer::render() {
   debug(2, "render() entry...");
 
@@ -515,9 +525,47 @@ void OpenGLRenderer::render() {
     }
   }
 
+    // We want to shift everything in the direction, in that the ship has to be shifted to be in the center of the screen.
+    SquareMatrix4df world_transformation_shifted = world_transformation;
+    if(game.ship_exists()) {
+        Vector2df spaceship_position = game.get_ship()->get_position();
+        Vector2df screen_middle = {512.0f, 384.0f};
+        Vector2df direction = screen_middle - spaceship_position;
+        debug(2, "ship position: " + std::to_string(spaceship_position[0]) + ", " + std::to_string(spaceship_position[1]));
+
+        world_transformation_shifted = world_transformation * create_translation(direction);
+    }
+
+
+    Vector2df top = {0.0f, 768.0f};
+    Vector2df left = {-1024.0f, 0.0f};
+    Vector2df bottom = {0.0f, -768.0f};
+    Vector2df right = {1024.0f, 0.0f};
+    Vector2df left_top = {-1024.0f, 768.0f};
+    Vector2df right_top = {1024.0f, 768.0f};
+    Vector2df left_bottom = {-1024.0f, -768.0f};
+    Vector2df right_bottom = {1024.0f, -768.0f};
+
+    SquareMatrix4df world_transformation_top = world_transformation_shifted * create_translation(top);
+    SquareMatrix4df world_transformation_left = world_transformation_shifted * create_translation(left);
+    SquareMatrix4df world_transformation_bottom = world_transformation_shifted * create_translation(bottom);
+    SquareMatrix4df world_transformation_right = world_transformation_shifted * create_translation(right);
+    SquareMatrix4df world_transformation_left_top = world_transformation_shifted * create_translation(left_top);
+    SquareMatrix4df world_transformation_right_top = world_transformation_shifted * create_translation(right_top);
+    SquareMatrix4df world_transformation_left_bottom = world_transformation_shifted * create_translation(left_bottom);
+    SquareMatrix4df world_transformation_right_bottom = world_transformation_shifted * create_translation(right_bottom);
+
   debug(2, "render all views");
   for (auto & view : views) {
-    view->render( world_transformation );
+    view->render( world_transformation_shifted ); //middle
+    view->render( world_transformation_top);
+    view->render( world_transformation_left);
+    view->render( world_transformation_bottom);
+    view->render( world_transformation_right);
+    view->render( world_transformation_left_top);
+    view->render( world_transformation_right_top);
+    view->render( world_transformation_left_bottom);
+    view->render( world_transformation_right_bottom);
   }
   
   renderFreeShips(world_transformation);
