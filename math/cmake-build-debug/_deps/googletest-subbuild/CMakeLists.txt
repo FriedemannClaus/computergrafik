@@ -1,7 +1,13 @@
 # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
 
-cmake_minimum_required(VERSION 3.26.4)
+cmake_minimum_required(VERSION 3.27.8)
+
+# Reject any attempt to use a toolchain file. We must not use one because
+# we could be downloading it here. If the CMAKE_TOOLCHAIN_FILE environment
+# variable is set, the cache variable will have been initialized from it.
+unset(CMAKE_TOOLCHAIN_FILE CACHE)
+unset(ENV{CMAKE_TOOLCHAIN_FILE})
 
 # We name the project and the target for the ExternalProject_Add() call
 # to something that will highlight to the user what we are working on if
@@ -13,9 +19,9 @@ project(googletest-populate NONE)
 
 include(ExternalProject)
 ExternalProject_Add(googletest-populate
-                     "UPDATE_DISCONNECTED" "False" "DOWNLOAD_EXTRACT_TIMESTAMP" "TRUE" "URL" "https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip"
-                    SOURCE_DIR          "C:/Users/Friedemann/Documents/Github/computergrafik/math/cmake-build-debug/_deps/googletest-src"
-                    BINARY_DIR          "C:/Users/Friedemann/Documents/Github/computergrafik/math/cmake-build-debug/_deps/googletest-build"
+                     "UPDATE_DISCONNECTED" "False" "DOWNLOAD_EXTRACT_TIMESTAMP" "TRUE" "EXTERNALPROJECT_INTERNAL_ARGUMENT_SEPARATOR" "URL" "https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip"
+                    SOURCE_DIR          "C:/Users/Friedemann/Documents/GitHub/computergrafik/math/cmake-build-debug/_deps/googletest-src"
+                    BINARY_DIR          "C:/Users/Friedemann/Documents/GitHub/computergrafik/math/cmake-build-debug/_deps/googletest-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

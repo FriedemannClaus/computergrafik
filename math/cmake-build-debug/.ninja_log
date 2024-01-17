@@ -1,15 +1,15 @@
 # ninja log v5
-0	175	7182116465187943	CMakeFiles/math_test.dir/math.cc.obj	c13f7acf50d4821e
-7010	7046	7182116533890478	lib/libgtest_main.a	a91ee36f76f59a12
-6	767	7182116471110400	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	936c0629a74f58fb
-2	1134	7182118597150815	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
-8	4660	7182116509910598	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	7c4567340538f368
-4661	7010	7182116533533532	lib/libgtest.a	e57eeb976319e0b0
-1134	3575	7182118621513646	math_test.exe	cf5cc1e9e8cbaa16
 3	407	7182136773449166	CMakeFiles/math_test.dir/math.cc.obj	c13f7acf50d4821e
+7501	7537	7182136844749448	lib/libgtest_main.a	a91ee36f76f59a12
 18	1156	7182136780931038	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	936c0629a74f58fb
 7	1454	7182136783906373	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
 13	5122	7182136820483264	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	7c4567340538f368
 5122	7501	7182136844384348	lib/libgtest.a	e57eeb976319e0b0
-7501	7537	7182136844749448	lib/libgtest_main.a	a91ee36f76f59a12
 7537	9946	7182136868791855	math_test.exe	cf5cc1e9e8cbaa16
+3	198	7271568439605582	CMakeFiles/math_test.dir/math.cc.obj	c13f7acf50d4821e
+10	849	7271568446100079	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	936c0629a74f58fb
+5	1148	7271568449086128	CMakeFiles/math_test.dir/math_test.cc.obj	6348592036beb947
+8	4744	7271568484955450	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	7c4567340538f368
+4744	7047	7271568508082701	lib/libgtest.a	e57eeb976319e0b0
+7047	7084	7271568508464499	lib/libgtest_main.a	a91ee36f76f59a12
+7084	9340	7271568530970244	math_test.exe	cf5cc1e9e8cbaa16

@@ -736,7 +736,7 @@ Instead, you can define a `FileOps` interface and an `IOOps` interface and split
 `System`'s functionalities into the two. Then you can mock `IOOps` without
 mocking `FileOps`.
 
-### Delegating Calls to a Real WorldObject
+### Delegating Calls to a Real Object
 
 When using testing doubles (mocks, fakes, stubs, and etc), sometimes their
 behaviors will differ from those of the real objects. This difference could be
@@ -1190,7 +1190,7 @@ using ::testing::Lt;
 Remember: if you do this, don't change `bar` after the `EXPECT_CALL()`, or the
 result is undefined.
 
-### Validating a Member of an WorldObject
+### Validating a Member of an Object
 
 Often a mock function takes a reference to object as an argument. When matching
 the argument, you may not want to compare the entire object against a fixed
@@ -2043,7 +2043,7 @@ class MockRolodex : public Rolodex {
       .WillOnce(SetArrayArgument<0>(names.begin(), names.end()));
 ```
 
-### Changing a Mock WorldObject's Behavior Based on the State
+### Changing a Mock Object's Behavior Based on the State
 
 If you expect a call to change the behavior of a mock object, you can use
 `::testing::InSequence` to specify different behaviors before and after the
@@ -4115,7 +4115,7 @@ Are we using a single-template-parameter action where `bool` refers to the type
 of `x`, or a two-template-parameter action where the compiler is asked to infer
 the type of `x`?
 
-### Using the ACTION WorldObject's Type
+### Using the ACTION Object's Type
 
 If you are writing a function that returns an `ACTION` object, you'll need to
 know its type. The type depends on the macro used to define the action and the

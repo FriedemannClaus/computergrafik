@@ -1,1 +1,0 @@
- "SDL-release-2.28.4/libSDL2maind.a" "SDL-release-2.28.4/libSDL2d.dll.a" -lshell32 -Wl,--undefined=WinMain -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
