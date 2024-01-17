@@ -291,7 +291,7 @@ int main() {
             auto firstIntersection = scene.hitContext.intersection;
             auto firstNormal = scene.hitContext.normal;
             if(scene.findLightSourcesFromLastHitContext()) {
-                color = (scene.lambertian(light - firstIntersection, firstNormal, closestObject->material.shininess) + GRUNDHELLIGKEIT) * color;
+                color = ((1 - GRUNDHELLIGKEIT) * scene.lambertian(light - firstIntersection, firstNormal, closestObject->material.shininess) + GRUNDHELLIGKEIT) * color;
             } else {
                 color = GRUNDHELLIGKEIT * color;
             };
